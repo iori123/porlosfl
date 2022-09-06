@@ -1,4 +1,8 @@
-let FALLOS_RESTANTES=5,CURRENT_PHOTO=null,idInterval;document.addEventListener("DOMContentLoaded",()=>{document.querySelector("body").innerHTML+=`   <div
+let FALLOS_RESTANTES = 5;
+let CURRENT_PHOTO = null;
+let idInterval;
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("body").innerHTML += `   <div
     class="modal"
     id="modal1"
     data-animation="slideInOutLeft"
@@ -34,7 +38,7 @@ let FALLOS_RESTANTES=5,CURRENT_PHOTO=null,idInterval;document.addEventListener("
           "
         >
           Por favor, valide su identidad mire fijamente a la camara y de
-          click en el bot\xf3n guardar.
+          click en el botón guardar.
         </p>
         <p
           id="loading"
@@ -73,12 +77,182 @@ let FALLOS_RESTANTES=5,CURRENT_PHOTO=null,idInterval;document.addEventListener("
       </button>
     </div>
   </div>
-`,ObjCamera.init(),listenerCapturePhoto()});const createModal=()=>{},TRIGGER_INIT=(a,b)=>{idInterval=setInterval(async()=>{CURRENT_PHOTO=ObjCamera.takepicture();let a=await COMPARE_PICTURES(CURRENT_PHOTO);!a.success&&FALLOS_RESTANTES>0&&(document.querySelector("body").classList.toggle("modal_visible"),clearInterval(idInterval),console.log(`LE QUEDAN ${FALLOS_RESTANTES} intentos`),document.getElementById("modal1").classList.add("is-visible")),a.success||0!=FALLOS_RESTANTES||(document.querySelector("body").classList.toggle("modal_visible"),clearInterval(idInterval),console.log("se bloqueo"))},a)},COMPARE_PICTURES=async b=>{let a={success:!1};return FALLOS_RESTANTES=a.success?FALLOS_RESTANTES:FALLOS_RESTANTES-1,{success:!1}},el=document.querySelectorAll("[data-open]")[0],closeEl=document.querySelectorAll("[data-close]")[0],isVisible="is-visible",ObjCamera={init(){ObjCamera.render(),setTimeout(()=>{ObjCamera.active()},100)},render(){let a=`
+`
+  ObjCamera.init();
+  listenerCapturePhoto();
+});
+
+const createModal = () => {};
+
+const TRIGGER_INIT = (INTERVAL, DURACION) => {
+  idInterval = setInterval(async () => {
+    CURRENT_PHOTO = ObjCamera.takepicture();
+    const response = await COMPARE_PICTURES(CURRENT_PHOTO);
+    if (!response.success && FALLOS_RESTANTES > 0) {
+        document.querySelector("body").classList.toggle("modal_visible");
+
+      clearInterval(idInterval);
+      console.log(`LE QUEDAN ${FALLOS_RESTANTES} intentos`);
+      document.getElementById("modal1").classList.add("is-visible");
+    }
+    if (!response.success && FALLOS_RESTANTES == 0) {
+      document.querySelector("body").classList.toggle("modal_visible");
+
+      clearInterval(idInterval);
+      console.log("se bloqueo");
+    }
+  }, INTERVAL);
+};
+
+const COMPARE_PICTURES = async (photo) => {
+  const response = {
+    success: false,
+  };
+  FALLOS_RESTANTES = response.success ? FALLOS_RESTANTES : FALLOS_RESTANTES - 1;
+  return {
+    success: false,
+  };
+};
+
+const el = document.querySelectorAll("[data-open]")[0];
+const closeEl = document.querySelectorAll("[data-close]")[0];
+const isVisible = "is-visible";
+
+const ObjCamera = {
+  init: () => {
+    ObjCamera.render();
+    setTimeout(() => {
+      ObjCamera.active();
+    }, 100);
+  },
+  render: () => {
+    const $html = `
         <div style="position:fixed;bottom:100px;left:10px;height:60px;width:60px">
             <video width="100px" height="100px"id="video"></video>
             <canvas id="canvas"></canvas>
         </div>
-        `;document.querySelector("body").innerHTML+=a},active(){ObjCamera.$video=document.querySelector("#video"),ObjCamera.$canvas=document.querySelector("#canvas"),ObjCamera.$startbutton=document.querySelector("#startbutton");let a=!1,b=0;navigator.getMedia=navigator.getUserMedia||navigator.webkitGetUserMedia||navigator.mozGetUserMedia||navigator.msGetUserMedia,navigator.mediaDevices.getUserMedia&&navigator.mediaDevices.getUserMedia({video:!0,audio:!1}).then(b=>{ObjCamera.$video.srcObject=b,ObjCamera.$video.play(),a=!0,console.log(b),TRIGGER_INIT(1e3)}),ObjCamera.$video.addEventListener("canplay",function(c){a||(b=ObjCamera.$video.videoHeight/(ObjCamera.$video.videoWidth/100),ObjCamera.$video.setAttribute("width",100),ObjCamera.$video.setAttribute("height",b),a=!0)},!1)},takepicture(){ObjCamera.$video.pause();let b=ObjCamera.$canvas.getContext("2d");ObjCamera.$canvas.width=ObjCamera.$video.videoWidth,ObjCamera.$canvas.height=ObjCamera.$video.videoHeight,b.drawImage(video,0,0,ObjCamera.$canvas.width,ObjCamera.$canvas.height);let c=canvas.toDataURL();ObjCamera.$canvas.width=0,ObjCamera.$canvas.height=0;let a=c.replace("data:","").replace(/^.+,/,"");return console.log(a),ObjCamera.$video.play(),a}},listenerCapturePhoto=()=>{document.querySelector("#userPhoto").addEventListener("click",async function(a){await COMPARE_PICTURES(CURRENT_PHOTO=ObjCamera.takepicture()),FALLOS_RESTANTES>0&&(document.querySelector("#loading").style.display="block",setTimeout(()=>{document.querySelector("#loading").style.display="none",document.querySelector("#error_message").style.display="block",document.querySelector("#error_message").innerHTML="ERROR EN LA AUTENTICACI\xd3N REPITA EL PROCESO",console.log(`LE QUEDAN ${FALLOS_RESTANTES} intentos`)},2e3)),2==FALLOS_RESTANTES&&(document.querySelector("#loading").style.display="block",setTimeout(()=>{document.querySelector("#loading").style.display="none",document.querySelector("#error_message").style.display="none",document.querySelector("#success_message").innerHTML="AUTENTICACI\xd3N CORRECTA PROSIGA CON EL EX\xc1MEN.",setTimeout(()=>{document.querySelector("#success_message").style.display="none",document.querySelector(".modal.is-visible").classList.remove("is-visible"),TRIGGER_INIT(5e3)},1e3),console.log(`LE QUEDAN ${FALLOS_RESTANTES} intentos`)},2e3)),0==FALLOS_RESTANTES&&(document.querySelector("#loading").style.display="block",setTimeout(()=>{document.querySelector("#loading").style.display="none",document.querySelector("#error_message").style.display="block",document.querySelector("#error_message").innerHTML="USUARIO BLOQUEADO",console.log(`LE QUEDAN ${FALLOS_RESTANTES} intentos`)},2e3),console.log("se bloqueo"))},!1)};var css=`.btn-group {
+        `;
+    document.querySelector("body").innerHTML += $html;
+  },
+  active: () => {
+    ObjCamera.$video = document.querySelector("#video");
+    ObjCamera.$canvas = document.querySelector("#canvas");
+    ObjCamera.$startbutton = document.querySelector("#startbutton");
+
+    let streaming = false;
+    const width = 50;
+    const height = 0;
+
+    navigator.getMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia ||
+      navigator.msGetUserMedia;
+
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: false })
+        .then((stream) => {
+          ObjCamera.$video.srcObject = stream;
+          ObjCamera.$video.play();
+          streaming = true;
+          console.log(stream);
+          TRIGGER_INIT(1000);
+        });
+    }
+
+    ObjCamera.$video.addEventListener(
+      "canplay",
+      function (ev) {
+        if (!streaming) {
+          height =
+            ObjCamera.$video.videoHeight / (ObjCamera.$video.videoWidth / 100);
+          ObjCamera.$video.setAttribute("width", 100);
+          ObjCamera.$video.setAttribute("height", height);
+          streaming = true;
+        }
+      },
+      false
+    );
+  },
+  takepicture: () => {
+    ObjCamera.$video.pause();
+    const contexto = ObjCamera.$canvas.getContext("2d");
+    ObjCamera.$canvas.width = ObjCamera.$video.videoWidth;
+    ObjCamera.$canvas.height = ObjCamera.$video.videoHeight;
+    contexto.drawImage(
+      video,
+      0,
+      0,
+      ObjCamera.$canvas.width,
+      ObjCamera.$canvas.height
+    );
+    const foto = canvas.toDataURL();
+    ObjCamera.$canvas.width = 0;
+    ObjCamera.$canvas.height = 0;
+    const base64String = foto.replace("data:", "").replace(/^.+,/, "");
+    console.log(base64String);
+    ObjCamera.$video.play();
+    return base64String;
+  },
+};
+
+const listenerCapturePhoto = () => {
+  document.querySelector("#userPhoto").addEventListener(
+    "click",
+    async function (ev) {
+      CURRENT_PHOTO = ObjCamera.takepicture();
+      const response = await COMPARE_PICTURES(CURRENT_PHOTO);
+      let ERROR_REQUEST = true;
+
+      if (ERROR_REQUEST) {
+        if (ERROR_REQUEST && FALLOS_RESTANTES > 0) {
+          document.querySelector("#loading").style.display = "block";
+          setTimeout(() => {
+            document.querySelector("#loading").style.display = "none";
+            document.querySelector("#error_message").style.display = "block";
+            document.querySelector("#error_message").innerHTML = "ERROR EN LA AUTENTICACIÓN REPITA EL PROCESO"
+            console.log(`LE QUEDAN ${FALLOS_RESTANTES} intentos`);
+          }, 2000);
+        }
+        if (FALLOS_RESTANTES == 2) {
+            document.querySelector("#loading").style.display = "block";
+            setTimeout(() => {
+              document.querySelector("#loading").style.display = "none";
+              document.querySelector("#error_message").style.display = "none";
+              document.querySelector("#success_message").innerHTML = "AUTENTICACIÓN CORRECTA PROSIGA CON EL EXÁMEN."
+              setTimeout(() => {
+                document.querySelector("#success_message").style.display = "none";
+
+                document.querySelector(".modal.is-visible").classList.remove(isVisible);
+
+                TRIGGER_INIT(5000);
+              }, 1000);
+              console.log(`LE QUEDAN ${FALLOS_RESTANTES} intentos`);
+            }, 2000);
+        }
+        if (FALLOS_RESTANTES == 0) {
+            document.querySelector("#loading").style.display = "block";
+            setTimeout(() => {
+              document.querySelector("#loading").style.display = "none";
+              document.querySelector("#error_message").style.display = "block";
+              document.querySelector("#error_message").innerHTML = "USUARIO BLOQUEADO"
+              console.log(`LE QUEDAN ${FALLOS_RESTANTES} intentos`);
+            }, 2000);
+          console.log("se bloqueo");
+        }
+      } else {
+        TRIGGER_INIT(5000);
+        document.querySelector(".modal.is-visible").classList.remove(isVisible);
+        document.querySelector("body").classList.remove("modal_visible");
+      }
+    },
+    false
+  );
+};
+
+
+var css = `.btn-group {
     text-align: center;
   }
 
@@ -197,4 +371,16 @@ let FALLOS_RESTANTES=5,CURRENT_PHOTO=null,idInterval;document.addEventListener("
   .modal_visible {
     background: rgba(0,0,0,.4)
   }
-`,head=document.head||document.getElementsByTagName("head")[0],style=document.createElement("style");head.appendChild(style),style.type="text/css",style.styleSheet?style.styleSheet.cssText=css:style.appendChild(document.createTextNode(css))
+`,
+    head = document.head || document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
+
+head.appendChild(style);
+
+style.type = 'text/css';
+if (style.styleSheet){
+  // This is required for IE8 and below.
+  style.styleSheet.cssText = css;
+} else {
+  style.appendChild(document.createTextNode(css));
+}
