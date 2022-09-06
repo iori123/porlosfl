@@ -1,1 +1,1 @@
-console.log("ramon")
+()(function(){console.log("dd")})
