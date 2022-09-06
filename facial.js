@@ -1,1 +1,1 @@
-()(function(){console.log("dd")})
+(function(){console.log("dd")})()
