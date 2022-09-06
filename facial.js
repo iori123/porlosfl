@@ -1,4 +1,5 @@
 let FALLOS_RESTANTES = 5;
+
 let CURRENT_PHOTO = null;
 let idInterval;
 document.addEventListener("DOMContentLoaded", () => {
