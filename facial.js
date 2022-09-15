@@ -5,9 +5,9 @@ let idInterval;
 let codeApplicant = "";
 let codeProcess = "";
 let codeAbase ,codePbase ;
-// BASE_URL_BACK = "https://desarrollo.oefa.gob.pe/rfa/backend/v1/facial/api";
+BASE_URL_BACK = "https://desarrollo.oefa.gob.pe/rfa/backend/v1/facial/api";
 URL_REDIRECT = "https://desarrollo.oefa.gob.pe/oefa-postulante-evalcas-web/postulante/paginas/facial/postulante_login.jsf?"
-BASE_URL_BACK = "http://localhost:8990/v1/facial/api";
+// BASE_URL_BACK = "http://localhost:8990/v1/facial/api";
 modalErrorMessageData = "";
 modalErrorTitleData = "";
 let a, p;
@@ -202,11 +202,10 @@ const getCodes = () => {
   };
 };
 const registerLogAPI = async () => {
-  console.log("api");
   const payload = {
     codeApplicant,
     codeProcess,
-    pictureCompare: "CURRENT_PHOTO",
+    pictureCompare: CURRENT_PHOTO,
     pictureRegister: "",
     stageType: 3,
     thresholdAccepted: 80,
@@ -220,15 +219,6 @@ const registerLogAPI = async () => {
     options.body = JSON.stringify(payload);
     const e = await fetch(`${BASE_URL_BACK}/log-api`, options);
     return e.json();
-    // const response = await fetch(`${BASE_URL_BACK}/log-api`, {
-    //   method: 'POST',
-    //   headers: {
-
-    //   },
-    //   body: payload,
-    // });
-    // console.log(response);
-    // return response.json();
   } catch (error) {}
 };
 const getApplicant = async (applicantCode) => {
